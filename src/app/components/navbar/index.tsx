@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { useLogout } from "../../pages/authenticated/hooks/use-logout";
 import { ModalTrigger } from "../Modal";
 import { Button } from "../Button";
+import { useNotification } from "../../hooks/useNotification";
 
 const getInitials = (name?: string) => {
   if (!name) return "";
@@ -21,6 +22,7 @@ export const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { show } = useNotification();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,6 +44,7 @@ export const Navbar = () => {
         Cookies.remove("token");
         clearSession();
         navigate("/login", { replace: true });
+        show("Logout Success", "success");
       },
     });
   };

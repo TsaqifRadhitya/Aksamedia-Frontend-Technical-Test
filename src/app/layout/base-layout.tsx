@@ -11,7 +11,7 @@ export const BaseLayout = () => {
   const { isMobile } = useBreakPoint();
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-screen">
       <Outlet />
       <Button
         onClick={() => setOpen(true)}
@@ -20,7 +20,6 @@ export const BaseLayout = () => {
       >
         <SettingsIcon />
       </Button>
-
       {open && (
         <div onClick={() => setOpen(false)} className="fixed inset-0 z-50">
           {isMobile ? (
