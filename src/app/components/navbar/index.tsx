@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useSession } from "../../hooks/useSession";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useLogout } from "../../pages/authenticated/hooks/use-logout";
 
 export const Navbar = () => {
   const { Session, clearSession } = useSession();
   const navigate = useNavigate();
+  const { mutate } = useLogout();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -25,9 +27,13 @@ export const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("token");
-    clearSession();
-    navigate("/login", { replace: true });
+    mutate(undefined, {
+      onSuccess: () => {
+        Cookies.remove("token");
+        clearSession();
+        navigate("/login", { replace: true });
+      },
+    });
   };
 
   return (
