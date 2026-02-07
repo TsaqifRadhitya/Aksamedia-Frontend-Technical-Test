@@ -25,15 +25,15 @@ export default function Layout() {
 
   if (isLoading && !Session) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white dark:bg-gray-950 transition-colors">
+      <div className="flex justify-center items-center h-screen bg-white dark:bg-gray-950 transition-colors w-screen">
         <div className="w-8 h-8 border-4 border-gray-300 dark:border-gray-700 border-t-black dark:border-t-white rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
-      <Navbar />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors w-screen flex flex-col items-center">
+      <Navbar/>
       <Outlet />
     </div>
   );

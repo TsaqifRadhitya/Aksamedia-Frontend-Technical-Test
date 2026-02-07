@@ -19,7 +19,7 @@ export type TEmployeesRequest = {
     division_id?: string
 }
 
-export type TEmployeesResponse = ApiResponseSuccessType<TEmployee[]>
+export type TEmployeesResponse = ApiResponseSuccessType<{ employee: TEmployee[] }>
 
 export type TEmployeeResponse = ApiResponseSuccessType<TEmployee>
 

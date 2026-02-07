@@ -42,6 +42,7 @@ export const Button = ({
       className={cn(
         baseStyles,
         variantStyles[variant],
+        "cursor-pointer",
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}

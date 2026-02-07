@@ -11,4 +11,4 @@ export type TDivision = {
     name: string
 }
 
-export type TDivisionsResponse = ApiResponseSuccessType<TDivision[]>
+export type TDivisionsResponse = ApiResponseSuccessType<{divisions : TDivision[]}>

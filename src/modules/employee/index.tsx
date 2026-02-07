@@ -1,4 +1,3 @@
-import axios from "axios";
 import type {
   TEmployeeResponse,
   TEmployeesRequest,
@@ -8,18 +7,19 @@ import { ENPOINTS } from "../../constants/end-points";
 import type { ApiResponseSuccessType } from "../../types";
 import type z from "zod";
 import type { EmployeeValidator } from "./schema";
+import { axios } from "../../libs/axios";
 
 export const getEmployees = async (
   params: TEmployeesRequest,
 ): Promise<TEmployeesResponse> => {
-  const request = await axios.get(ENPOINTS.EMPLOYEES, {
+  const request = await axios().get(ENPOINTS.EMPLOYEES, {
     params,
   });
   return request.data;
 };
 
 export const getEmployee = async (id: string): Promise<TEmployeeResponse> => {
-  const request = await axios.get(ENPOINTS.SHOW_EMPLOYEES(id));
+  const request = await axios().get(ENPOINTS.SHOW_EMPLOYEES(id));
   return request.data;
 };
 
@@ -37,7 +37,7 @@ export const createEmployee = async ({
     }
   });
 
-  const request = await axios.post(ENPOINTS.CREATE_EMPLOYEES, formData, {
+  const request = await axios().post(ENPOINTS.CREATE_EMPLOYEES, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -61,7 +61,7 @@ export const updateEmployee = async ({
     }
   });
 
-  const request = await axios.post(ENPOINTS.UPDATE_EMPLOYEES(id), formData, {
+  const request = await axios().post(ENPOINTS.UPDATE_EMPLOYEES(id), formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -72,6 +72,6 @@ export const updateEmployee = async ({
 export const deleteEmployee = async (
   id: string,
 ): Promise<ApiResponseSuccessType<never>> => {
-  const request = await axios.delete(ENPOINTS.DELETE_EMPLOYEES(id));
+  const request = await axios().delete(ENPOINTS.DELETE_EMPLOYEES(id));
   return request.data;
 };

@@ -11,7 +11,7 @@ export const BaseLayout = () => {
   const { isMobile } = useBreakPoint();
 
   return (
-    <>
+    <div className="flex justify-center">
       <Outlet />
       <Button
         onClick={() => setOpen(true)}
@@ -97,6 +97,6 @@ export const BaseLayout = () => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };

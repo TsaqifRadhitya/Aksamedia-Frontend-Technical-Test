@@ -5,7 +5,7 @@ export type ButtonVariant = "default" | "primary" | "secondary" | "bordered" | "
 export type Props = {
     children: ReactNode
     onClick?: () => void
-    className: string
+    className?: string
     disabled?: boolean
     variant?: ButtonVariant
     type?: "submit" | "reset" | "button" | undefined
