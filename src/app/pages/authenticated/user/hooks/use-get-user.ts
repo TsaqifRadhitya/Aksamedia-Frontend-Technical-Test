@@ -6,6 +6,7 @@ export const useGetUser = () => {
     return useQuery({
         queryKey: [QUERY_KEY.USER],
         queryFn: getUser,
-        retry: false
+        retry: false,
+        select: (response) => response.data
     })
 }

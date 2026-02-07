@@ -33,7 +33,7 @@ export const createEmployee = async ({
     if (value instanceof File) {
       formData.append(key, value);
     } else if (value !== undefined && value !== null) {
-      formData.append(key, String(value));
+      formData.append(key, value);
     }
   });
 
