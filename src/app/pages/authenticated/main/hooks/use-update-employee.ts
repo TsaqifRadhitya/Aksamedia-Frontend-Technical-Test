@@ -9,6 +9,9 @@ export const useUpdateEmployee = (id?: string) => {
         mutationFn: updateEmployee,
         onSuccess: () => {
             queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY.EMPLOYEES.INDEX]
+            })
+            queryClient.invalidateQueries({
                 queryKey: [QUERY_KEY.EMPLOYEES.SHOW, id]
             })
         }

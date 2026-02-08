@@ -74,10 +74,10 @@ export const Navbar = () => {
             className="px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 transition cursor-pointer flex items-center gap-x-3 outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
           >
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-green-500 text-white shadow-sm ring-2 ring-white dark:ring-gray-900">
-              {getInitials(Session?.username)}
+              {getInitials(Session?.name)}
             </div>
             <span className="text-sm font-medium hidden sm:block">
-              {Session?.username}
+              {Session?.name}
             </span>
           </button>
           <AnimatePresence>
@@ -92,7 +92,7 @@ export const Navbar = () => {
               >
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {Session?.username}
+                    {Session?.name}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                     Administrator
@@ -107,7 +107,6 @@ export const Navbar = () => {
                     <UserIcon size={16} />
                     Profile
                   </button>
-
                   <button
                     onClick={onLogoutClick}
                     className="w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition flex items-center gap-2"

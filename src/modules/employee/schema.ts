@@ -10,7 +10,7 @@ const ACCEPTED_IMAGE_TYPES = [
 export const EmployeeValidator = z.object({
     image: z
         .any()
-        .refine((file) => !!file, { message: "Image is required." }) // Cek keberadaan file
+        .refine((file) => !!file, { message: "Image is required." })
         .refine((file) => file?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB.`,
         })
@@ -29,10 +29,10 @@ export const EmployeeValidator = z.object({
 
     phone: z
         .string()
+        .regex(/^[0-9]+$/, { message: "Phone number must contain only digits" })
         .min(1, { message: "Phone number is required" })
         .min(10, { message: "Phone number is too short" })
-        .max(15, { message: "Phone number is too long" })
-        .regex(/^[0-9]+$/, { message: "Phone number must contain only digits" }),
+        .max(15, { message: "Phone number is too long" }),
 
     division: z
         .string()

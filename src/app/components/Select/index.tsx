@@ -36,7 +36,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         const rect = triggerRef.current.getBoundingClientRect();
         setCoords({
           left: rect.left + window.scrollX,
-          top: rect.bottom + window.scrollY + 4, // +4px margin
+          top: rect.bottom + window.scrollY + 4,
           width: rect.width,
         });
       }

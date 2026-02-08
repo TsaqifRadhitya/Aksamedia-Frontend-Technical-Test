@@ -81,7 +81,7 @@ export const CreateEmployeeForm = ({
       <div>
         <Label>Name</Label>
         <Input
-          placeholder="Ex: John Doe" // Placeholder
+          placeholder="Ex: John Doe"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           disabled={isPending}
@@ -92,7 +92,7 @@ export const CreateEmployeeForm = ({
       <div>
         <Label>Phone</Label>
         <Input
-          placeholder="Ex: 08123456789" // Placeholder
+          placeholder="Ex: 08123456789"
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           disabled={isPending}
@@ -103,7 +103,7 @@ export const CreateEmployeeForm = ({
       <div>
         <Label>Position</Label>
         <Input
-          placeholder="Ex: Software Engineer" // Placeholder
+          placeholder="Ex: Software Engineer"
           value={form.position}
           onChange={(e) => setForm({ ...form, position: e.target.value })}
           disabled={isPending}
@@ -118,7 +118,7 @@ export const CreateEmployeeForm = ({
           onChange={(e) => setForm({ ...form, division: e.target.value })}
           value={form.division}
           error={errorField?.division}
-          placeholder="Select Division" // Placeholder dipindah ke props component
+          placeholder="Select Division"
           items={divisions.map((d) => ({
             label: d.name,
             value: d.id,

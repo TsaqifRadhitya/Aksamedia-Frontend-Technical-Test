@@ -10,5 +10,6 @@ export const ENPOINTS = {
     UPDATE_EMPLOYEES: (id: string) => `/api/employees/${id}`,
     DELETE_EMPLOYEES: (id: string) => `/api/employees/${id}`,
 
-    USER: "/api/user"
+    USER: "/api/user",
+    USER_UPDATE : "/api/user/update"
 }

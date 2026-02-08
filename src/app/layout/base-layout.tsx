@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme/type";
 import { SettingsIcon } from "lucide-react";
 import { useBreakPoint } from "../hooks/useBreakPoint";
-import { AnimatePresence, motion } from "framer-motion"; // 1. Import Framer Motion
+import { AnimatePresence, motion } from "framer-motion";
 import { ThemeButtons } from "../components/ThemeButton";
 
 export const BaseLayout = () => {

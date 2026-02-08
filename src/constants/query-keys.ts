@@ -18,6 +18,7 @@ export const QUERY_KEY = {
     },
 
     USER: {
-        GET: "use-get-user"
+        GET: "use-get-user",
+        UPDATE: "use-update-user"
     },
 }
