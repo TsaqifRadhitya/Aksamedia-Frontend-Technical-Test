@@ -14,7 +14,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ModalTrigger } from "../../../components/Modal";
 import { useEffect, useState } from "react";
-import type { TUser } from "../../../../modules/user/type";
+import {
+  type TUserUpdatePayload,
+  type TUserValidationException,
+  type TUserValidationExceptionResponse,
+} from "../../../../modules/user/type";
 import { ROUTES } from "../../../../constants/routes";
 import { UpdateUserValidator } from "../../../../modules/user/shema";
 import { useUpdateUser } from "./hooks/use-update-user";
@@ -24,13 +28,12 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Page() {
   const { Session, isLoading, clearSession, setSession } = useSession();
   const navigate = useNavigate();
-  const [user, setUser] = useState<Omit<TUser, "id">>({
+  const [user, setUser] = useState<TUserUpdatePayload>({
     email: "",
     name: "",
     phone: "",
-    username: "",
   });
-  const [userError, setUserError] = useState<Omit<TUser, "id" | "username">>();
+  const [userError, setUserError] = useState<TUserValidationException>();
 
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
@@ -80,9 +83,21 @@ export default function Page() {
     mutate(user, {
       onSuccess: () => {
         show("Success Update Personal Information", "success");
-        setSession({ ...user, id: Session.id });
+        setSession({ ...user, id: Session.id, username: Session.username });
         setIsEditUser(false);
         setShowConfirmModal(false);
+      },
+      onError: (e: any) => {
+        if (e.response) {
+          const errorResponse: TUserValidationExceptionResponse =
+            e.response.data.error;
+
+          setUserError({
+            email: errorResponse?.email?.[0],
+            name: errorResponse?.name?.[0],
+            phone: errorResponse?.phone?.[0],
+          });
+        }
       },
     });
   };
@@ -116,7 +131,7 @@ export default function Page() {
         <h1 className="text-2xl">Back to Employee List</h1>
       </div>
       <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden mb-6">
-        <div className="h-32 bg-gradient-to-r from-green-400 to-emerald-600 dark:from-green-900 dark:to-emerald-900 relative"></div>
+        <div className="h-32 bg-linea-to-r from-green-400 to-emerald-600 dark:from-green-900 dark:to-emerald-900 relative"></div>
         <div className="px-6 pb-6 relative">
           <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-12 mb-4 gap-4">
             <div className="w-24 h-24 rounded-full bg-white dark:bg-gray-900 p-1.5 shadow-md">
@@ -205,7 +220,7 @@ export default function Page() {
               Username
             </Label>
             <Input
-              value={user?.username}
+              value={Session?.username}
               disabled
               className="bg-gray-50 dark:bg-gray-800/50"
             />

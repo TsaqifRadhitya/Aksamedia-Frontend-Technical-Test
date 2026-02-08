@@ -1,5 +1,5 @@
 import type z from "zod"
-import type { ApiResponseSuccessType } from "../../types"
+import type { ApiResponseSuccessType, ValidatioErrorResponseType, ValidatioErrorType } from "../../types"
 import type { UpdateUserValidator } from "./shema"
 
 export type TUser = {
@@ -13,3 +13,6 @@ export type TUser = {
 export type TUserResponse = ApiResponseSuccessType<TUser>
 
 export type TUserUpdatePayload = z.infer<typeof UpdateUserValidator>
+
+export type TUserValidationException = ValidatioErrorType<TUserUpdatePayload>
+export type TUserValidationExceptionResponse = ValidatioErrorResponseType<TUserUpdatePayload>

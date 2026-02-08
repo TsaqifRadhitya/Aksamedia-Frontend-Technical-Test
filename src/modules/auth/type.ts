@@ -1,5 +1,5 @@
 import type z from "zod";
-import type { ApiResponseErrorType, ApiResponseSuccessType, ValidatioErrorType } from "../../types";
+import type { ApiResponseErrorType, ApiResponseSuccessType, ValidatioErrorResponseType, ValidatioErrorType } from "../../types";
 import type { loginValidator } from "./schema";
 
 export type TUser = {
@@ -15,7 +15,7 @@ export type TLoginResponseSuccess = ApiResponseSuccessType<{
     admin: TUser
 }>
 
-export type TLoginResponseError = ApiResponseErrorType<ValidatioErrorType<z.infer<typeof loginValidator>>>
+export type TLoginResponseError = ApiResponseErrorType<ValidatioErrorResponseType<z.infer<typeof loginValidator>>>
 
 export type TLoginRequest = z.infer<typeof loginValidator>
 

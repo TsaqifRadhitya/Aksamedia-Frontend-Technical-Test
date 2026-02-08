@@ -54,8 +54,8 @@ export default function LoginPage() {
           }
 
           setErrorForm({
-            username: errorResponse.error?.username,
-            password: errorResponse.error?.password,
+            username: errorResponse.error?.username?.[0],
+            password: errorResponse.error?.password?.[0],
           });
         }
       },
