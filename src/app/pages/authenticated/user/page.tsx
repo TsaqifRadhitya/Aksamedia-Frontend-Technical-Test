@@ -2,6 +2,7 @@ import { useSession } from "../../../hooks/useSession";
 import { Label } from "../../../components/Label";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
+import Cookies from "js-cookie";
 import {
   UserIcon,
   MailIcon,
@@ -24,6 +25,7 @@ import { UpdateUserValidator } from "../../../../modules/user/shema";
 import { useUpdateUser } from "./hooks/use-update-user";
 import { useNotification } from "../../../hooks/useNotification";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLogout } from "../hooks/use-logout";
 
 export default function Page() {
   const { Session, isLoading, clearSession, setSession } = useSession();
@@ -58,9 +60,17 @@ export default function Page() {
     setUserError(undefined);
   };
 
+  const { mutate: mutateLogout, isPending: isPendingLogout } = useLogout();
+
   const handleLogout = () => {
-    clearSession();
-    navigate(ROUTES.AUTH.LOGIN);
+    mutateLogout(undefined, {
+      onSuccess: () => {
+        Cookies.remove("token");
+        clearSession();
+        show("Logout Success", "success");
+        setOpenModal(false);
+      },
+    });
   };
 
   useEffect(() => {
@@ -175,10 +185,15 @@ export default function Page() {
                   <Button
                     variant="bordered"
                     onClick={() => setOpenModal(false)}
+                    disabled={isPendingLogout}
                   >
                     Cancel
                   </Button>
-                  <Button variant="danger" onClick={handleLogout}>
+                  <Button
+                    variant="danger"
+                    disabled={isPendingLogout}
+                    onClick={handleLogout}
+                  >
                     Confirm
                   </Button>
                 </div>
