@@ -141,7 +141,7 @@ export default function Page() {
         <h1 className="text-2xl">Back to Employee List</h1>
       </div>
       <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden mb-6">
-        <div className="h-32 bg-linea-to-r from-green-400 to-emerald-600 dark:from-green-900 dark:to-emerald-900 relative"></div>
+        <div className="h-32 bg-linear-to-r from-green-400 to-emerald-600 dark:from-green-900 dark:to-emerald-900 relative"></div>
         <div className="px-6 pb-6 relative">
           <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-12 mb-4 gap-4">
             <div className="w-24 h-24 rounded-full bg-white dark:bg-gray-900 p-1.5 shadow-md">
@@ -189,11 +189,7 @@ export default function Page() {
                   >
                     Cancel
                   </Button>
-                  <Button
-                    variant="danger"
-                    disabled={isPendingLogout}
-                    onClick={handleLogout}
-                  >
+                  <Button variant="danger" onClick={handleLogout}>
                     Confirm
                   </Button>
                 </div>
