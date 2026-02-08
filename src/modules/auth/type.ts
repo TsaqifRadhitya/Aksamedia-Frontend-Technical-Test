@@ -1,5 +1,5 @@
 import type z from "zod";
-import type { ApiResponseErrorType, ApiResponseSuccessType, ValidatioErrorResponseType, ValidatioErrorType } from "../../types";
+import type { ApiResponseErrorType, ApiResponseSuccessType, ValidatioErrorResponseType } from "../../types";
 import type { loginValidator } from "./schema";
 
 export type TUser = {
