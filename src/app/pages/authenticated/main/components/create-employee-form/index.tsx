@@ -7,6 +7,7 @@ import { Button } from "../../../../../components/Button";
 import type { TEmployeeValidationException } from "../../../../../../modules/employee/type";
 import { EmployeeValidator } from "../../../../../../modules/employee/schema";
 import { useNotification } from "../../../../../hooks/useNotification";
+import { Select } from "../../../../../components/Select";
 
 export const CreateEmployeeForm = ({
   handleOnFinish,
@@ -34,7 +35,7 @@ export const CreateEmployeeForm = ({
     const error = validate.error?.format();
     setErrorField({
       division: error?.division?._errors[0],
-      image: error?.image?._errors[0],
+      image: error?.image?._errors[0] as string,
       name: error?.name?._errors[0],
       phone: error?.phone?._errors[0],
       position: error?.position?._errors[0],
@@ -44,7 +45,7 @@ export const CreateEmployeeForm = ({
       {
         payload: {
           division: form.division,
-          image: form.image,
+          image: form.image!,
           name: form.name,
           phone: form.phone,
           position: form.position,
@@ -72,66 +73,63 @@ export const CreateEmployeeForm = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900  dark:border-gray-800 rounded-xl shadow-sm p-2 space-y-2.5 transition-colors min-w-lg w-2/3">
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+    <div className="p-2 space-y-4 transition-color">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
         Create Employee
       </h2>
+
       <div>
         <Label>Name</Label>
         <Input
+          placeholder="Ex: John Doe" // Placeholder
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           disabled={isPending}
+          error={errorField?.name}
         />
-        {errorField?.name && <Label variant="error">{errorField?.name}</Label>}
       </div>
+
       <div>
         <Label>Phone</Label>
         <Input
+          placeholder="Ex: 08123456789" // Placeholder
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           disabled={isPending}
+          error={errorField?.phone}
         />
-        {errorField?.phone && (
-          <Label variant="error">{errorField?.phone}</Label>
-        )}
       </div>
+
       <div>
         <Label>Position</Label>
         <Input
+          placeholder="Ex: Software Engineer" // Placeholder
           value={form.position}
           onChange={(e) => setForm({ ...form, position: e.target.value })}
           disabled={isPending}
+          error={errorField?.position}
         />
-        {errorField?.position && (
-          <Label variant="error">{errorField?.position}</Label>
-        )}
       </div>
+
       <div>
         <Label>Division</Label>
-        <select
-          value={form.division}
-          onChange={(e) => setForm({ ...form, division: e.target.value })}
+        <Select
           disabled={isPending}
-          className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 
-                     border-gray-300 dark:border-gray-700 
-                     text-gray-800 dark:text-gray-200
-                     focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-        >
-          <option value="">Select Division</option>
-          {divisions.map((division: any) => (
-            <option key={division.id} value={division.id}>
-              {division.name}
-            </option>
-          ))}
-        </select>
-        {errorField?.division && (
-          <Label variant="error">{errorField?.division}</Label>
-        )}
+          onChange={(e) => setForm({ ...form, division: e.target.value })}
+          value={form.division}
+          error={errorField?.division}
+          placeholder="Select Division" // Placeholder dipindah ke props component
+          items={divisions.map((d) => ({
+            label: d.name,
+            value: d.id,
+            disable: false,
+          }))}
+        />
       </div>
+
       <div>
         <Label>Image</Label>
-        <input
+        <Input
           type="file"
           accept="image/*"
           disabled={isPending}
@@ -141,17 +139,15 @@ export const CreateEmployeeForm = ({
               image: e.target.files?.[0] ?? null,
             })
           }
-          className="w-full text-sm text-gray-600 dark:text-gray-300"
+          error={errorField?.image}
         />
-        {errorField?.image && (
-          <Label variant="error">{errorField?.image}</Label>
-        )}
       </div>
+
       <Button
         onClick={handleSubmit}
         disabled={isPending}
         variant="primary"
-        className="w-full"
+        className="w-full mt-4"
       >
         {isPending ? "Creating..." : "Create Employee"}
       </Button>

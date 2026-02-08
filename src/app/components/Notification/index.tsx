@@ -6,7 +6,7 @@ export const Notification = () => {
   const { notifications, remove } = useNotification();
 
   return (
-    <div className="fixed top-6 right-6 z-[999] space-y-3 w-sm">
+    <div className="fixed top-6 right-6 z-999 space-y-3 w-sm">
       <AnimatePresence>
         {notifications.map((n) => (
           <motion.div
@@ -37,7 +37,7 @@ export const Notification = () => {
               animate={{ width: "0%" }}
               transition={{ duration: 3, ease: "linear" }}
               className={cn(
-                "absolute bottom-0 left-0 h-[5px]",
+                "absolute bottom-0 left-0 h-1.25",
                 n.type === "success" && "bg-green-500",
                 n.type === "error" && "bg-red-500",
                 n.type === "info" && "bg-blue-500",

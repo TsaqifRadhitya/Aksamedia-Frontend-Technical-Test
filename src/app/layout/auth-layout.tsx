@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
 import { Navbar } from "../components/navbar";
 import { useEffect } from "react";
@@ -6,6 +6,7 @@ import { useEffect } from "react";
 export default function Layout() {
   const { Session, isLoading } = useSession();
   const navigate = useNavigate();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -17,9 +18,14 @@ export default function Layout() {
 
   useEffect(() => {
     if (!isLoading && !Session) {
-      navigate("/login");
+      navigate(
+        `/login?return_to=${encodeURIComponent(location.pathname + location.search)}`,
+        {
+          replace: true,
+        },
+      );
     }
-  }, [Session, isLoading]);
+  }, [Session, isLoading, navigate, location]);
 
   return (
     <div className="min-h-screen w-screen items-center flex flex-col p-5 lg:px-32">

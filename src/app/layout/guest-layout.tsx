@@ -1,16 +1,20 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
 import { useEffect } from "react";
 
 export default function GuestLayout() {
   const { isLoading, Session } = useSession();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (!isLoading && Session) {
-      navigate("/");
+      const targetUrl = searchParams.get("return_to") || "/";
+      console.log(targetUrl)
+
+      navigate(targetUrl, { replace: true });
     }
-  }, [isLoading, Session]);
+  }, [isLoading, Session, navigate, location]);
 
   if (isLoading) {
     return (

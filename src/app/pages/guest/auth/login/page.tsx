@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
 import { useSession } from "../../../../hooks/useSession";
 import { usePostLogin } from "./hooks/use-post-login";
 import { Button } from "../../../../components/Button";
@@ -72,31 +71,31 @@ export default function LoginPage() {
         }}
         className="w-full max-w-md p-8 bg-white dark:bg-gray-900 shadow-lg rounded-xl space-y-5"
       >
-        <h1 className="text-2xl font-semibold text-center text-black dark:text-white">Login</h1>
+        <h1 className="text-2xl font-semibold text-center text-black dark:text-white">
+          Login
+        </h1>
 
         <div>
           <Label>Username</Label>
           <Input
+            placeholder="Enter your username"
             value={form.username}
             onChange={(e) => setForm({ ...form, username: e.target.value })}
             disabled={isPending}
+            error={errorForm.username}
           />
-          {errorForm.username && (
-            <Label variant="error">{errorForm.username}</Label>
-          )}
         </div>
 
         <div>
           <Label>Password</Label>
           <Input
             type="password"
+            placeholder="Enter your password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             disabled={isPending}
+            error={errorForm.password}
           />
-          {errorForm.password && (
-            <Label variant="error">{errorForm.password}</Label>
-          )}
         </div>
 
         <Button
