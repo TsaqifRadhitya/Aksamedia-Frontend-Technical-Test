@@ -43,7 +43,6 @@ export const Navbar = () => {
       onSuccess: () => {
         Cookies.remove("token");
         clearSession();
-        navigate("/login", { replace: true });
         show("Logout Success", "success");
       },
     });
@@ -80,7 +79,7 @@ export const Navbar = () => {
             <div className="absolute right-0 mt-2.5 w-44 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-md overflow-hidden">
               <button
                 onClick={handleGoToProfile}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer"
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition dark:text-white cursor-pointer"
               >
                 Profile
               </button>

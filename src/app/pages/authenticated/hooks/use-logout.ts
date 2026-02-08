@@ -8,7 +8,7 @@ export const useLogout = () => {
         mutationKey: [QUERY_KEY.AUTH.LOGOUT],
         mutationFn: logout,
         onSuccess: () => {
-            queryClient.invalidateQueries({
+            queryClient.removeQueries({
                 queryKey: [QUERY_KEY.USER.GET]
             })
         }

@@ -11,7 +11,7 @@ export const BaseLayout = () => {
   const { isMobile } = useBreakPoint();
 
   return (
-    <div className="flex justify-center w-screen">
+    <div className="flex justify-center w-screen bg-white dark:bg-gray-950">
       <Outlet />
       <Button
         onClick={() => setOpen(true)}
@@ -60,7 +60,6 @@ export const BaseLayout = () => {
               </div>
             </div>
           ) : (
-            /* DESKTOP → Popover di atas button */
             <div
               onClick={(e) => e.stopPropagation()}
               className="absolute bottom-24 right-6 bg-white dark:bg-gray-900 rounded-xl shadow-xl w-72 p-4 space-y-3"

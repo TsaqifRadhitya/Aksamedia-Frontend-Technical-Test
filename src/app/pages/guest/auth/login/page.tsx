@@ -11,7 +11,7 @@ import type { TLoginResponseError } from "../../../../../modules/auth/type";
 import { useNotification } from "../../../../hooks/useNotification";
 
 export default function LoginPage() {
-  const { setSession, Session } = useSession();
+  const { setSession } = useSession();
   const { mutate, isPending } = usePostLogin();
   const { show } = useNotification();
 
@@ -24,10 +24,6 @@ export default function LoginPage() {
     username?: string;
     password?: string;
   }>({});
-
-  if (Session) {
-    return <Navigate to="/" replace />;
-  }
 
   const handleSubmit = () => {
     const validate = loginValidator.safeParse(form);
