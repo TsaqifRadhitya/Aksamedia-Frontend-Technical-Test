@@ -1,6 +1,7 @@
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
 import { useEffect } from "react";
+import { ROUTES } from "../../constants/routes";
 
 export default function GuestLayout() {
   const { isLoading, Session } = useSession();
@@ -9,8 +10,7 @@ export default function GuestLayout() {
 
   useEffect(() => {
     if (!isLoading && Session) {
-      const targetUrl = searchParams.get("return_to") || "/";
-      console.log(targetUrl)
+      const targetUrl = searchParams.get("return_to") || ROUTES.HOME;
 
       navigate(targetUrl, { replace: true });
     }

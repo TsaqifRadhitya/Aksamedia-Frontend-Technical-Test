@@ -61,7 +61,7 @@ export const updateEmployee = async ({
     }
   });
 
-  const request = await axios().post(ENPOINTS.UPDATE_EMPLOYEES(id), formData, {
+  const request = await axios().put(ENPOINTS.UPDATE_EMPLOYEES(id), formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

@@ -16,6 +16,7 @@ import { Input } from "../../../components/Input";
 import { ConfirmDeleteEmployeeModal } from "./components/modal-delete";
 import { Select } from "../../../components/Select";
 import { useGetDivisions } from "./hooks/use-get-divisions";
+import { FormEditEmployee } from "./components/edit-employee-form";
 
 export default function Page() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -149,8 +150,8 @@ export default function Page() {
           {employeeData.pagination && (
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Showing {employeeData.pagination.from} to{" "}
-              {employeeData.pagination.to || 0} of {employeeData.pagination.total}{" "}
-              entries
+              {employeeData.pagination.to || 0} of{" "}
+              {employeeData.pagination.total} entries
             </span>
           )}
         </div>
@@ -220,17 +221,26 @@ export default function Page() {
                       <div className="flex items-center gap-2.5">
                         <ModalTrigger
                           isOpen={onActionData?.action === "edit"}
-                          onClose={() => {}}
+                          onClose={() => setOnActionData(undefined)}
                           TriggerComponent={
                             <Button
                               variant="secondary"
                               className="aspect-square p-2.5"
+                              onClick={() =>
+                                setOnActionData({
+                                  data: employee,
+                                  action: "edit",
+                                })
+                              }
                             >
                               <Edit2Icon size={15} />
                             </Button>
                           }
                         >
-                          <></>
+                          <FormEditEmployee
+                            handleFinish={() => setOnActionData(undefined)}
+                            data={onActionData?.data}
+                          />
                         </ModalTrigger>
                         <ModalTrigger
                           isOpen={onActionData?.action === "delete"}

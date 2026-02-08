@@ -5,18 +5,17 @@ const ACCEPTED_IMAGE_TYPES = [
     "image/jpeg",
     "image/jpg",
     "image/png",
-    "image/webp",
 ];
 
 export const EmployeeValidator = z.object({
     image: z
         .any()
-        .refine((files) => files?.length >= 1, { message: "Image is required." })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+        .refine((file) => !!file, { message: "Image is required." }) // Cek keberadaan file
+        .refine((file) => file?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB.`,
         })
         .refine(
-            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             {
                 message: "Only .jpg, .jpeg, .png and .webp formats are supported.",
             }

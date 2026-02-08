@@ -133,12 +133,12 @@ export const CreateEmployeeForm = ({
           type="file"
           accept="image/*"
           disabled={isPending}
-          onChange={(e) =>
+          onChange={(e) => {
             setForm({
               ...form,
               image: e.target.files?.[0] ?? null,
-            })
-          }
+            });
+          }}
           error={errorField?.image}
         />
       </div>
