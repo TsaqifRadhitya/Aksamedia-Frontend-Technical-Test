@@ -9,6 +9,7 @@ export const Input = ({
   disabled = false,
   value,
   defaultValue,
+  onKeyDown,
 }: Props) => {
   const baseStyles =
     "px-3 py-2 border rounded-md transition-all duration-200 w-full " +
@@ -26,6 +27,7 @@ export const Input = ({
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
+      onKeyDown={onKeyDown}
       className={cn(
         baseStyles,
         disabled &&

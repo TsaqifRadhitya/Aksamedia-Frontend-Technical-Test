@@ -22,7 +22,7 @@ export default function Layout() {
   }, [Session, isLoading]);
 
   return (
-    <div className="min-h-screen w-screen items-center flex flex-col">
+    <div className="min-h-screen w-screen items-center flex flex-col p-5 lg:px-32">
       <Navbar />
       <Outlet />
     </div>

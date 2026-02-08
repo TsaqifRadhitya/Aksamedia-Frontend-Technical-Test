@@ -37,7 +37,7 @@ export const Notification = () => {
               animate={{ width: "0%" }}
               transition={{ duration: 3, ease: "linear" }}
               className={cn(
-                "absolute bottom-0 left-0 h-[3px]",
+                "absolute bottom-0 left-0 h-[5px]",
                 n.type === "success" && "bg-green-500",
                 n.type === "error" && "bg-red-500",
                 n.type === "info" && "bg-blue-500",

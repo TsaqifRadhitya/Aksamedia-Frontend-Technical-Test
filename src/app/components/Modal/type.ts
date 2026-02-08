@@ -5,4 +5,5 @@ export type Props = {
     children: ReactNode
     isOpen: boolean
     className?: string
+    bgClassName? : string
 }

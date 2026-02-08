@@ -24,6 +24,10 @@ export type ApiResponseErrorType<T> = {
     error: T
 }
 
+export type ValidatioErrorResponseType<T> = {
+    [K in keyof T]?: string[]
+}
+
 export type ValidatioErrorType<T> = {
     [K in keyof T]?: string
 }

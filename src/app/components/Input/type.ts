@@ -8,4 +8,5 @@ export type Props = {
     disabled?: boolean
     value?: any
     defaultValue?: any
+    onKeyDown? : (e : React.KeyboardEvent<HTMLInputElement>) => void
 }

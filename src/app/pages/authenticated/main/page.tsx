@@ -1,61 +1,144 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom"; // 1. Import ini
 import type { TEmployee } from "../../../../modules/employee/type";
 import { Button } from "../../../components/Button";
 import { ModalTrigger } from "../../../components/Modal";
-import { useGetEmployees } from "../employee/hooks/use-get-employee";
+import { useGetEmployees } from "./hooks/use-get-employee";
 import { CreateEmployeeForm } from "./components/create-employee-form";
+import {
+  Edit2Icon,
+  Trash2Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "lucide-react";
+import { Input } from "../../../components/Input";
+import { ConfirmDeleteEmployeeModal } from "./components/modal-delete";
 
 export default function Page() {
-  const { data, isLoading } = useGetEmployees({});
-
-  const employees: TEmployee[] = data?.data.employee || [];
-  const pagination = data?.pagination;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const search = searchParams.get("name") || "";
+  const [searchInput, setSearchInput] = useState(search);
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
 
   const [isOpenCreateForm, seOpenCreateForm] = useState<boolean>(false);
+  const [onActionData, setOnActionData] = useState<{
+    data: TEmployee;
+    action: "edit" | "delete";
+  }>();
+
+  const { data, isLoading } = useGetEmployees({
+    page: page,
+    perpage: 10,
+    name: search,
+  });
+
+  const employees: TEmployee[] = data?.data.employees || [];
+  const pagination = data?.pagination;
+
+  const updateParams = (key: string, value: string | number) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (value) {
+      newParams.set(key, String(value));
+    } else {
+      newParams.delete(key);
+    }
+
+    if (key === "name") {
+      newParams.set("page", "1");
+    }
+
+    setSearchParams(newParams);
+  };
+
+  const handleNextPage = () => {
+    if (pagination && page < pagination.last_page) {
+      updateParams("page", page + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+      updateParams("page", page - 1);
+    }
+  };
+
+  const handleSearch = () => {
+    updateParams("name", searchInput);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-y-2.5 h-[90vh] max-w-7xl w-full ">
-      <ModalTrigger
-        isOpen={isOpenCreateForm}
-        onClose={() => seOpenCreateForm(false)}
-        TriggerComponent={
-          <Button
-            variant="primary"
-            onClick={() => seOpenCreateForm(true)}
-            className="ml-auto"
+    <div className="flex flex-col items-center justify-center gap-y-5 h-[80vh] max-w-7xl w-full mt-15 pt-10">
+      <div className="flex flex-col md:flex-row justify-between w-full items-center shrink-0 gap-4">
+        <h1 className="font-bold text-black dark:text-white text-xl lg:text-3xl text-left w-full lg:w-fit">
+          List Employee
+        </h1>
+
+        <div className="flex items-center gap-3 ml-auto">
+          <div className="relative group">
+            <Input
+              type="text"
+              placeholder="Search by name..."
+              className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 dark:text-white w-64"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+            <SearchIcon
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={16}
+            />
+          </div>
+
+          <ModalTrigger
+            isOpen={isOpenCreateForm}
+            onClose={() => seOpenCreateForm(false)}
+            TriggerComponent={
+              <Button variant="primary" onClick={() => seOpenCreateForm(true)}>
+                Add Employee
+              </Button>
+            }
           >
-            Add Employee
-          </Button>
-        }
-      >
-        <CreateEmployeeForm />
-      </ModalTrigger>
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors max-w-7xl w-full">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center max-w-5xl">
+            <CreateEmployeeForm
+              handleOnFinish={() => seOpenCreateForm(false)}
+            />
+          </ModalTrigger>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors max-w-7xl w-full flex flex-col flex-1 min-h-0">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center shrink-0">
           <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Employees
           </h1>
           {pagination && (
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {pagination.from}-{pagination.to} of {pagination.total}
+              Showing {pagination.from} to {pagination.to} of {pagination.total}{" "}
+              entries
             </span>
           )}
         </div>
-        <div className="overflow-x-auto">
+
+        <div className="overflow-auto flex-1">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+            <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 sticky top-0 shadow-sm">
               <tr>
                 <th className="px-4 py-3 text-left font-medium">Employee</th>
                 <th className="px-4 py-3 text-left font-medium">Phone</th>
                 <th className="px-4 py-3 text-left font-medium">Division</th>
                 <th className="px-4 py-3 text-left font-medium">Position</th>
+                <th className="px-4 py-3 text-left font-medium">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800 h-[50vh]">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {isLoading && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="text-center py-6 text-gray-500 dark:text-gray-400"
                   >
                     Loading employees...
@@ -65,10 +148,10 @@ export default function Page() {
               {!isLoading && employees.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="text-center py-6 text-gray-500 dark:text-gray-400"
                   >
-                    No employees found.
+                    No employees found matching "{search}".
                   </td>
                 </tr>
               )}
@@ -99,17 +182,85 @@ export default function Page() {
                     <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
                       {employee.position}
                     </td>
+                    <td>
+                      <div className="flex items-center gap-2.5">
+                        <ModalTrigger
+                          isOpen={onActionData?.action === "edit"}
+                          TriggerComponent={
+                            <Button
+                              variant="secondary"
+                              className="aspect-square p-2.5"
+                            >
+                              <Edit2Icon size={15} />
+                            </Button>
+                          }
+                        >
+                          <></>
+                        </ModalTrigger>
+                        <ModalTrigger
+                          isOpen={onActionData?.action === "delete"}
+                          className="w-1/3"
+                          bgClassName="bg-black/10"
+                          onClose={() => setOnActionData(undefined)}
+                          TriggerComponent={
+                            <Button
+                              variant="danger"
+                              className="aspect-square p-2.5"
+                              onClick={() =>
+                                setOnActionData({
+                                  data: employee,
+                                  action: "delete",
+                                })
+                              }
+                            >
+                              <Trash2Icon size={15} />
+                            </Button>
+                          }
+                        >
+                          <ConfirmDeleteEmployeeModal
+                            handleFinish={() => setOnActionData(undefined)}
+                            data={onActionData?.data}
+                          />
+                        </ModalTrigger>
+                      </div>
+                    </td>
                   </tr>
                 ))}
             </tbody>
           </table>
         </div>
+
         {pagination && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400 flex justify-between">
-            <span>
+          <div className="p-4 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center shrink-0 bg-white dark:bg-gray-900 relative">
+            <span className="hidden sm:inline">
               Page {pagination.current_page} of {pagination.last_page}
             </span>
-            <span>Total: {pagination.total}</span>
+
+            <div className="flex items-center gap-2 ml-auto sm:ml-0 w-full sm:w-auto justify-between sm:justify-end">
+              <Button
+                variant="bordered"
+                onClick={handlePrevPage}
+                disabled={page === 1 || isLoading}
+                className="flex items-center gap-1 text-xs px-3 py-1.5"
+              >
+                <ChevronLeftIcon size={16} />
+                Previous
+              </Button>
+
+              <span className="sm:hidden text-xs">
+                {pagination.current_page} / {pagination.last_page}
+              </span>
+
+              <Button
+                variant="bordered"
+                onClick={handleNextPage}
+                disabled={page === pagination.last_page || isLoading}
+                className="flex items-center gap-1 text-xs px-3 py-1.5"
+              >
+                Next
+                <ChevronRightIcon size={16} />
+              </Button>
+            </div>
           </div>
         )}
       </div>

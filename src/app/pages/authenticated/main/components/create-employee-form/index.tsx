@@ -1,13 +1,21 @@
 import { useState } from "react";
-import { useCreateEmployee } from "../../../employee/hooks/use-create-employee";
-import { useGetDivisions } from "../../../employee/hooks/use-get-divisions";
+import { useCreateEmployee } from "../../hooks/use-create-employee";
+import { useGetDivisions } from "../../hooks/use-get-divisions";
 import { Label } from "../../../../../components/Label";
 import { Input } from "../../../../../components/Input";
 import { Button } from "../../../../../components/Button";
+import type { TEmployeeValidationException } from "../../../../../../modules/employee/type";
+import { EmployeeValidator } from "../../../../../../modules/employee/schema";
+import { useNotification } from "../../../../../hooks/useNotification";
 
-export const CreateEmployeeForm = () => {
+export const CreateEmployeeForm = ({
+  handleOnFinish,
+}: {
+  handleOnFinish: () => void;
+}) => {
   const { data } = useGetDivisions({});
   const { mutate, isPending } = useCreateEmployee();
+  const { show } = useNotification();
 
   const divisions = data?.data.divisions || [];
 
@@ -15,31 +23,59 @@ export const CreateEmployeeForm = () => {
     name: "",
     phone: "",
     position: "",
-    division_id: "",
+    division: "",
     image: null as File | null,
   });
 
-  const handleSubmit = () => {
-    if (!form.name || !form.phone || !form.division_id || form.image == null)
-      return;
+  const [errorField, setErrorField] = useState<TEmployeeValidationException>();
 
-    mutate({
-      payload: {
-        division_id: form.division_id,
-        image: form.image,
-        name: form.name,
-        phone: form.phone,
-        position: form.position,
-      },
+  const handleSubmit = () => {
+    const validate = EmployeeValidator.safeParse(form);
+    const error = validate.error?.format();
+    setErrorField({
+      division: error?.division?._errors[0],
+      image: error?.image?._errors[0],
+      name: error?.name?._errors[0],
+      phone: error?.phone?._errors[0],
+      position: error?.position?._errors[0],
     });
+    if (!validate.success || form.image === null) return;
+    mutate(
+      {
+        payload: {
+          division: form.division,
+          image: form.image,
+          name: form.name,
+          phone: form.phone,
+          position: form.position,
+        },
+      },
+      {
+        onSuccess: () => {
+          show(`Success add new employee ${form.name}`, "success");
+          handleOnFinish();
+        },
+        onError: (e: any) => {
+          const errorResponse: TEmployeeValidationException =
+            e.response.data.error;
+          const { division, image, name, phone, position } = errorResponse;
+          setErrorField({
+            division: division?.[0],
+            image: image?.[0],
+            name: name?.[0],
+            phone: phone?.[0],
+            position: position?.[0],
+          });
+        },
+      },
+    );
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900  dark:border-gray-800 rounded-xl shadow-sm p-2 space-y-5 transition-colors min-w-lg w-2/3">
+    <div className="bg-white dark:bg-gray-900  dark:border-gray-800 rounded-xl shadow-sm p-2 space-y-2.5 transition-colors min-w-lg w-2/3">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
         Create Employee
       </h2>
-
       <div>
         <Label>Name</Label>
         <Input
@@ -47,6 +83,7 @@ export const CreateEmployeeForm = () => {
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           disabled={isPending}
         />
+        {errorField?.name && <Label variant="error">{errorField?.name}</Label>}
       </div>
       <div>
         <Label>Phone</Label>
@@ -55,6 +92,9 @@ export const CreateEmployeeForm = () => {
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           disabled={isPending}
         />
+        {errorField?.phone && (
+          <Label variant="error">{errorField?.phone}</Label>
+        )}
       </div>
       <div>
         <Label>Position</Label>
@@ -63,12 +103,15 @@ export const CreateEmployeeForm = () => {
           onChange={(e) => setForm({ ...form, position: e.target.value })}
           disabled={isPending}
         />
+        {errorField?.position && (
+          <Label variant="error">{errorField?.position}</Label>
+        )}
       </div>
       <div>
         <Label>Division</Label>
         <select
-          value={form.division_id}
-          onChange={(e) => setForm({ ...form, division_id: e.target.value })}
+          value={form.division}
+          onChange={(e) => setForm({ ...form, division: e.target.value })}
           disabled={isPending}
           className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 
                      border-gray-300 dark:border-gray-700 
@@ -82,6 +125,9 @@ export const CreateEmployeeForm = () => {
             </option>
           ))}
         </select>
+        {errorField?.division && (
+          <Label variant="error">{errorField?.division}</Label>
+        )}
       </div>
       <div>
         <Label>Image</Label>
@@ -97,8 +143,10 @@ export const CreateEmployeeForm = () => {
           }
           className="w-full text-sm text-gray-600 dark:text-gray-300"
         />
+        {errorField?.image && (
+          <Label variant="error">{errorField?.image}</Label>
+        )}
       </div>
-
       <Button
         onClick={handleSubmit}
         disabled={isPending}

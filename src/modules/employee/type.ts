@@ -1,5 +1,5 @@
 import type z from "zod"
-import type { ApiResponseSuccessType, ValidatioErrorType } from "../../types"
+import type { ApiResponseSuccessType, ValidatioErrorResponseType, ValidatioErrorType } from "../../types"
 import type { TDivision } from "../division/type"
 import type { EmployeeValidator } from "./schema"
 
@@ -19,7 +19,7 @@ export type TEmployeesRequest = {
     division_id?: string
 }
 
-export type TEmployeesResponse = ApiResponseSuccessType<{ employee: TEmployee[] }>
+export type TEmployeesResponse = ApiResponseSuccessType<{ employees: TEmployee[] }>
 
 export type TEmployeeResponse = ApiResponseSuccessType<TEmployee>
 
@@ -28,3 +28,5 @@ export type TCreateEmployeeRequest = Omit<TEmployee, "image"> & {
 }
 
 export type TEmployeeValidationException = ValidatioErrorType<z.infer<typeof EmployeeValidator>>
+
+export type TEmployeeValidationExceptionResponse = ValidatioErrorResponseType<z.infer<typeof EmployeeValidator>>
